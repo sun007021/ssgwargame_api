@@ -51,10 +51,15 @@ public class qnaService {
         qnaRepository.deleteById(id);
     }
 
-    public void updateQnA(Long id, QnA qna){
+    public QnA updateQnA(Long id, QnASaveRequest qna){
         Optional<QnA> optionalQnA = qnaRepository.findById(id);
         QnA q= optionalQnA.get();
-
+        Optional<Problems> problems = problemsRepository.findById(qna.getProblemsID());
+        Problems p = problems.get();
+        if (!problems.isPresent()) {
+            throw new EntityNotFoundException(
+                    "problem Not Found");
+        }
         q.setTitle(qna.getTitle());
         q.setContent(qna.getContent());
         q.setAnswerNumber(qna.getAnswerNumber());
@@ -63,7 +68,8 @@ public class qnaService {
         q.setWriteTime(qna.getWriteTime());
         q.setUpvote(qna.getUpvote());
         q.setViewCount(qna.getViewCount());
-        q.setProblems(qna.getProblems());
+        q.setProblems(p);
         //q.setAccount(qna.getAccount()); // account 개발 후 추가
+        return(qnaRepository.save(q));
     }
 }

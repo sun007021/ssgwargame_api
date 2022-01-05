@@ -105,7 +105,7 @@ public class ProblemsController {
 
     /**
      * 질문 등록
-     * @param qna
+     * @param request
      * @return
      */
     @PostMapping("qna") // title flag fields description score filelink filename
@@ -127,13 +127,12 @@ public class ProblemsController {
     /**
      * 질문 수정
      * @param id
-     * @param qna
+     * @param request
      * @return
      */
     @PutMapping("qna")
-    public ResponseEntity<QnA> updateQnA(@RequestParam Long id, @RequestBody QnA qna){
-        qnaService.updateQnA(id, qna);
-        return new ResponseEntity<QnA>(qna, HttpStatus.OK);
+    public ResponseEntity<QnA> updateQnA(@RequestParam Long id, @RequestBody QnASaveRequest request){
+        return ResponseEntity.ok(qnaService.updateQnA(id, request));
     }
 
 }
